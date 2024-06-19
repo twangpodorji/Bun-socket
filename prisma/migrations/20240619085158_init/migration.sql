@@ -1,0 +1,31 @@
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CreateTable
+CREATE TABLE "Chat" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "user1Id" TEXT NOT NULL,
+    "user2Id" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Chat_user1Id_fkey" FOREIGN KEY ("user1Id") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Chat_user2Id_fkey" FOREIGN KEY ("user2Id") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "Message" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "chatId" TEXT NOT NULL,
+    "senderId" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Message_chatId_fkey" FOREIGN KEY ("chatId") REFERENCES "Chat" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "Message_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
